@@ -27,8 +27,26 @@ export class MediaService {
         this.user.token = dataFromServer.token;
         console.log(this.user);
         localStorage.setItem('user', JSON.stringify(this.user));
-        this.router.navigate[('front')];
+        this.router.navigate(['front']);
 
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  register = () => {
+    return this.http.post(this.url + '/users', this.user)
+    .subscribe(
+      resp => {
+        const originalUser = this.user;
+        const dataFromServer = resp.json();
+
+        this.user = dataFromServer.user;
+        delete originalUser['email'];
+        this.setUser(originalUser);
+        this.login();
       },
       error => {
         console.log(error);
